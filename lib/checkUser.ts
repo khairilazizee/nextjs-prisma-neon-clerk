@@ -4,7 +4,7 @@ import { log } from "console";
 
 export const checkUser = async () => {
     const user = await currentUser();
-    console.log(user);
+    // console.log(user);
     
 
     // check for current log in clerk user

@@ -13,7 +13,7 @@ const Header = async () => {
     <header className="flex justify-end items-center p-4 gap-4 h-16">
       <SignedOut>
         <SignInButton>
-          <button className="text-white rounded-sm font-medium text-sm sm:text-base px-3 py-2 sm:px-4 cursor-pointer">
+          <button className="text-black dark:text-white rounded-sm font-medium text-sm sm:text-base px-3 py-2 sm:px-4 cursor-pointer">
             Sign In
           </button>
         </SignInButton>

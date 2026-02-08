@@ -2,45 +2,63 @@
 import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { addTransaction } from "@/actions/transaction/add";
+import { set } from "zod";
+import { redirect } from "next/navigation";
 
 interface Transaction {
   text: string;
   amount: number;
 }
 
-const AddTransaction = () => {
+export const AddTransaction = () => {
   const [transaction, setTransaction] = useState<Transaction>({
     text: "",
     amount: 0,
   });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(transaction);
-    const res = await fetch("/api/transaction", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(transaction),
-    });
+  const handleSubmit = async (formData: FormData) => {
+    // console.log(formData);
+    const { error } = await addTransaction(formData);
 
-    if (!res.ok) {
-      console.error("Failed to save transaction");
-      return;
+    if (error) {
+      console.error(error);
+    } else {
+      redirect("/");
     }
 
-    setTransaction({
-      text: "",
-      amount: 0,
-    });
+    // setTransaction({
+    //   text: "",
+    //   amount: 0,
+    // });
+
+    // redirect("/");
+
+    // console.log(transaction);
+    // const res = await fetch("/api/transaction", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(transaction),
+    // });
+
+    // if (!res.ok) {
+    //   console.error("Failed to save transaction");
+    //   return;
+    // }
+
+    // setTransaction({
+    //   text: "",
+    //   amount: 0,
+    // });
   };
 
   return (
     <div>
       <div>Transaction</div>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col  space-y-2">
+      <form action={handleSubmit} className="space-y-3">
+        <div className="flex flex-col space-y-2">
           <label htmlFor="">Text</label>
           <Input
             type="text"
@@ -57,17 +75,16 @@ const AddTransaction = () => {
             type="number"
             name="amount"
             value={transaction.amount}
+            step={0.01}
             onChange={(e) =>
               setTransaction({ ...transaction, amount: Number(e.target.value) })
             }
           />
         </div>
         <div>
-          <Button variant="outline">Button</Button>
+          <Button variant="outline">Save</Button>
         </div>
       </form>
     </div>
   );
 };
-
-export default AddTransaction;
